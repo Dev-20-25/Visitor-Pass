@@ -230,7 +230,20 @@ export default function VisitorApp() {
       <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1.05rem' }}>
         Thank you for visiting <strong>E-Merge tech</strong>. Your details have been recorded safely.
       </p>
-      <button className="btn-start" onClick={() => window.location.reload()}>
+      <button 
+        className="btn-start" 
+        onClick={() => {
+          // Attempt Smart Exit
+          const win = window.open("", "_self");
+          if (win) {
+            win.close();
+          }
+          // Fallback if browser blocks close()
+          setTimeout(() => {
+            window.location.href = "about:blank";
+          }, 300);
+        }}
+      >
         Done
       </button>
     </div>
