@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
-import { CheckCircle2, Loader2, Eraser, ChevronRight } from 'lucide-react';
+import { BadgeCheck, Loader2, Eraser, ChevronRight } from 'lucide-react';
 
 type Step = 'welcome' | 'form' | 'success';
 
@@ -23,15 +23,24 @@ export default function VisitorApp() {
 
   const validateForm = () => {
     const errors: Record<string, string> = {};
-    if (!formData.name.trim()) errors.name = 'Full name is required';
     
-    const phoneRegex = /^[0-9+]{10,15}$/;
+    // Name validation: At least 2 chars, letters only
+    const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+    if (!formData.name.trim()) {
+      errors.name = 'Full name is required';
+    } else if (!nameRegex.test(formData.name)) {
+      errors.name = 'Please enter a valid name (letters only)';
+    }
+    
+    // Phone validation: Exactly 10 digits
+    const phoneRegex = /^[0-9]{10}$/;
     if (!formData.phoneNumber.trim()) {
       errors.phoneNumber = 'Phone number is required';
-    } else if (!phoneRegex.test(formData.phoneNumber.replace(/\s/g, ''))) {
-      errors.phoneNumber = 'Enter a valid phone number';
+    } else if (!phoneRegex.test(formData.phoneNumber)) {
+      errors.phoneNumber = 'Enter a valid 10-digit phone number';
     }
 
+    // Email validation
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = 'Enter a valid email address';
     }
@@ -211,16 +220,18 @@ export default function VisitorApp() {
   );
 
   const renderSuccess = () => (
-    <div className="card success-message">
-      <div className="success-icon">
-        <CheckCircle2 size={40} />
+    <div className="card success-message" style={{ animation: 'bounceIn 0.8s' }}>
+      <div className="success-icon-wrapper">
+        <BadgeCheck size={60} strokeWidth={1.5} />
       </div>
-      <h2 style={{ marginBottom: '1rem', color: 'var(--text-main)' }}>Form Submitted Successfully!</h2>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-        Thank you for visiting <strong>E-Merge tech</strong>. Your details have been recorded.
+      <h2 style={{ marginBottom: '1.5rem', color: 'var(--text-main)', fontSize: '1.65rem', fontWeight: '800', lineHeight: '1.2' }}>
+        Your form has been submitted successfully
+      </h2>
+      <p style={{ color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '1.05rem' }}>
+        Thank you for visiting <strong>E-Merge tech</strong>. Your details have been recorded safely.
       </p>
       <button className="btn-start" onClick={() => window.location.reload()}>
-        Close
+        Done
       </button>
     </div>
   );
@@ -228,6 +239,14 @@ export default function VisitorApp() {
   return (
     <div className="main-wrapper">
       <div className="bg-decor" />
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner-container">
+            <Loader2 size={48} className="animate-spin" color="white" />
+            <p style={{ color: 'white', marginTop: '1.5rem', fontWeight: '600', fontSize: '1.1rem' }}>Submitting your details...</p>
+          </div>
+        </div>
+      )}
       <main className="container">
         {step === 'welcome' && renderWelcome()}
         {step === 'form' && renderForm()}

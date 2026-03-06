@@ -261,18 +261,49 @@ body {
   box-shadow: 0 20px 25px -12px var(--primary-glow);
 }
 
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.loading-spinner-container {
+  text-align: center;
+  animation: entrance 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 /* Success State */
 .success-message {
   text-align: center;
-  padding: 3.5rem 2rem;
+  padding: 4rem 2rem;
 }
 
-.success-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+.success-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  background: white;
+  color: var(--success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2.5rem;
+  box-shadow: 
+    0 0 0 8px rgba(16, 185, 129, 0.05),
+    0 10px 40px -10px rgba(16, 185, 129, 0.4);
+  animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid #f0fdf4;
+}
+
+.success-icon-wrapper svg {
+  filter: drop-shadow(0 4px 6px rgba(16, 185, 129, 0.2));
 }
 
 /* Footer Section */
@@ -317,6 +348,23 @@ body {
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 480px) {
